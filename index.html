@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube to MP3 Converter</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body, html {
+            height: 100%;
+            margin: 2;
+        }
+
+        .bg {
+            /* The image used */
+            background-image: url("bg.png");
+
+            /* Full height */
+            height: 100%; 
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube to MP3 Converter</h1>
+        <form id="convert-form">
+            <input type="text" id="youtube-url" placeholder="Enter YouTube URL" required>
+            <button type="submit">Convert</button>
+        </form>
+        <div id="message"></div>
+    </div>
+    <script>
+        document.getElementById('convert-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const url = document.getElementById('youtube-url').value;
+            fetch('http://localhost:5000/convert', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: url })
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(new Blob([blob]));
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'audio.mp3';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.getElementById('message').textContent = 'Download started!';
+            })
+            .catch(error => {
+                document.getElementById('message').textContent = 'An error occurred: ' + error.message;
+            });
+        });
+    </script>
+    <footer class="footer">
+    <p>&copy; 2025 Ricky John. All rights reserved.</p>
+</footer>
+</body>
+</html>
