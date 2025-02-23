@@ -7,7 +7,7 @@ from pydub import AudioSegment
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/convert', methods=['POST'])
+@app.route('https://yt-2-mp-3-akira-axzt6sjgy-akirachoi01s-projects.vercel.app/convert', methods=['POST'])
 def convert_to_mp3():
     data = request.get_json()
     url = data.get('url')
