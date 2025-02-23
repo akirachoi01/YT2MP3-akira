@@ -1,0 +1,14 @@
+{
+  "name": "yt-to-mp3",
+  "version": "1.0.0",
+  "description": "A YouTube to MP3 converter - Akirachoi",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "ytdl-core": "^4.9.1",
+    "fluent-ffmpeg": "^2.1.2"
+  }
+}
