@@ -1,0 +1,9 @@
+{
+  "name": "Y2mp3",
+  "version": "1.0.0",
+  "description": "A YouTube to MP3 converter using serverless functions by akirachoi",
+  "dependencies": {
+    "ytdl-core": "^4.9.1",
+    "fluent-ffmpeg": "^2.1.2"
+  }
+}
