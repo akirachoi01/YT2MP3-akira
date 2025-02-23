@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube to MP3 Converter</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body, html {
+            height: 100%;
+            margin: 2;
+        }
+
+        .bg {
+            /* The image used */
+            background-image: url("bg.png");
+
+            /* Full height */
+            height: 100%; 
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+</style>
+
+</head>
+<body>
+    <h1>YouTube to MP3 Converter</h1>
+    <form id="converterForm">
+        <label for="url">Enter YouTube URL:</label>
+        <input type="text" id="url" placeholder="Enter video URL" required>
+        <button type="submit">Convert to MP3</button>
+    </form>
+    <div id="downloadLink"></div>
+
+    <script>
+        document.getElementById('converterForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const url = document.getElementById('url').value;
+
+            // Make sure the URL is valid
+            if (url) {
+                // Send a request to the backend
+                fetch('/convert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('downloadLink').innerHTML = `<a href="${data.downloadLink}" download>Download MP3</a>`;
+                    } else {
+                        document.getElementById('downloadLink').innerHTML = 'Error converting video';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('downloadLink').innerHTML = 'Error processing the request';
+                });
+            } else {
+                alert('Please enter a valid URL.');
+            }
+        });
+    </script>
+    <footer class="footer">
+    <p>&copy; 2025 Ricky John. All rights reserved.</p>
+</footer>
+</body>
+</html>
