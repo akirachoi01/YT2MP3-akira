@@ -28,40 +28,44 @@
 
 </head>
 <body>
-    <div class="container">
-        <h1>YouTube to MP3 Converter</h1>
-        <form id="convert-form">
-            <input type="text" id="youtube-url" placeholder="Enter YouTube URL" required>
-            <button type="submit">Convert</button>
-        </form>
-        <div id="message"></div>
-    </div>
+    <h1>YouTube to MP3 Converter</h1>
+    <form id="converterForm">
+        <label for="url">Enter YouTube URL:</label>
+        <input type="text" id="url" placeholder="Enter video URL" required>
+        <button type="submit">Convert to MP3</button>
+    </form>
+    <div id="downloadLink"></div>
+
     <script>
-        document.getElementById('convert-form').addEventListener('submit', function(e) {
+        document.getElementById('converterForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const url = document.getElementById('youtube-url').value;
-            fetch('http://localhost:5000/convert', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ url: url })
-            })
-            .then(response => response.blob())
-            .then(blob => {
-                const url = window.URL.createObjectURL(new Blob([blob]));
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = url;
-                a.download = 'audio.mp3';
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.getElementById('message').textContent = 'Download started!';
-            })
-            .catch(error => {
-                document.getElementById('message').textContent = 'An error occurred: ' + error.message;
-            });
+            const url = document.getElementById('url').value;
+
+            // Make sure the URL is valid
+            if (url) {
+                // Send a request to the backend
+                fetch('/convert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('downloadLink').innerHTML = `<a href="${data.downloadLink}" download>Download MP3</a>`;
+                    } else {
+                        document.getElementById('downloadLink').innerHTML = 'Error converting video';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('downloadLink').innerHTML = 'Error processing the request';
+                });
+            } else {
+                alert('Please enter a valid URL.');
+            }
         });
     </script>
     <footer class="footer">
