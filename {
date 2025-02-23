@@ -1,0 +1,39 @@
+const express = require('express');
+const ytdl = require('ytdl-core');
+const ffmpeg = require('fluent-ffmpeg');
+const fs = require('fs');
+const app = express();
+const path = require('path');
+
+app.use(express.json());
+
+app.post('/convert', (req, res) => {
+    const videoUrl = req.body.url;
+
+    if (!ytdl.validateURL(videoUrl)) {
+        return res.json({ success: false, message: 'Invalid YouTube URL' });
+    }
+
+    const stream = ytdl(videoUrl, { quality: 'highestaudio' });
+    const outputPath = path.join(__dirname, 'output.mp3');
+
+    ffmpeg(stream)
+        .audioCodec('libmp3lame')
+        .format('mp3')
+        .on('end', () => {
+            res.json({
+                success: true,
+                downloadLink: '/output.mp3'
+            });
+        })
+        .on('error', (err) => {
+            res.json({ success: false, message: err.message });
+        })
+        .save(outputPath);
+});
+
+app.use('/output.mp3', express.static(path.join(__dirname, 'output.mp3')));
+
+app.listen(3000, () => {
+    console.log('Server started on http://localhost:3000');
+});
