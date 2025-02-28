@@ -40,7 +40,7 @@ npm start
 
 If it’s a Python app:
 bash
-python main.py
+python YT2MP3-akira.py
 If it's a web-based project, check for an index.html file and open it in a browser.
 
 ## 🛠️ 4. Verify Everything Works
