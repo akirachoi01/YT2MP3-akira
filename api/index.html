@@ -4248,7 +4248,19 @@ background-image: url("3.png");
         <p>&copy; 2025 https://www.reusora.org/. All rights reserved.</p>
     </footer>
 
-
+<script type="text/javascript">
+  (function(d, t) {
+      var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+      v.onload = function() {
+        window.voiceflow.chat.load({
+          verify: { projectID: '67cee4a94bb3f24b4361e8ae' },
+          url: 'https://general-runtime.voiceflow.com',
+          versionID: 'production'
+        });
+      }
+      v.src = "https://cdn.voiceflow.com/widget/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
+  })(document, 'script');
+</script>
     </body>
 
 
